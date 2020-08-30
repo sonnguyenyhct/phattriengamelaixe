@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phat trien game lai xe</title>
+</head>
+<body onkeydown="keydownHandler(event)">
+<p id="score"> Score = 0</p>
+<canvas id="myCanvas" width="1000" height="500" style="border: 1px solid #000"></canvas>
+<img alt="Car" id="carImage" src="Lamborghini-Free-PNG-Image.png" hidden>
+<img alt="Car" id="carImage1" src="Lamborghini-Free-PNG-Image2.png" hidden>
+<img alt="Car" id="carImage2" src="Lamborghini-Free-PNG-Image3.png" hidden>
+<img alt="Car" id="carImage3" src="Lamborghini-Free-PNG-Image4.png" hidden>
+<img alt="csgt" id="csgtImage" src="092158148.png" hidden>
+<img alt="gift" id="giftImage" src="unnamed.png" hidden>
+    <script>
+        let widthImage = 50;
+        let heightImage = 50;
+        let xCar = 400;
+        let yCar = 200;
+        let speed = 1;
+        let score = 0;
+        let gifts = []
+        let count = 0;
+        myCanvas = document.getElementById("myCanvas");
+        let ctx = myCanvas.getContext("2d");
+        let imageCSGT = document.getElementById("csgtImage");
+        let imageGift = document.getElementById("giftImage");
+        let image = document.getElementById("carImage");
+        let image1 = document.getElementById("carImage1");
+        let image2 = document.getElementById("carImage2");
+        let image3 = document.getElementById("carImage3");
+        xCSGT = 1000*Math.random();
+        yCSGT = 500*Math.random();
+        xCSGT1 = 1000*Math.random();
+        yCSGT1 = 500*Math.random();
+        xCSGT2 = 1000*Math.random();
+        yCSGT2 = 500*Math.random();
+        ctx.drawImage(imageCSGT,xCSGT,yCSGT,widthImage,heightImage);
+        ctx.drawImage(imageCSGT,xCSGT1,yCSGT1,widthImage,heightImage);
+        ctx.drawImage(imageCSGT,xCSGT2,yCSGT2,widthImage,heightImage);
+
+        /*for (; count < 3 ; count++){
+            xGift = 1000*Math.random();
+            yGift = 500*Math.random();
+            let gift = ctx.drawImage(imageGift,xGift,yGift,widthImage,heightImage);
+            gifts.push(gift);
+        }*/
+
+        let setIntervalCar = setInterval(moveToTop, 50);
+        function checkLose(){
+            if (Math.abs(xCar - xCSGT) < widthImage && Math.abs(yCar - yCSGT) < widthImage
+                || Math.abs(xCar - xCSGT1) < widthImage && Math.abs(yCar - yCSGT1) < widthImage
+                || Math.abs(xCar - xCSGT2) < widthImage && Math.abs(yCar - yCSGT2) < widthImage
+            ){
+                alert("Ban da thua");
+                clearInterval(setIntervalCar);
+                location.reload(true);
+            }else if (xCar <= 0){
+                clearInterval(setIntervalCar);
+                setIntervalCar = setInterval(moveToRight, 50);
+            }else if (yCar <= 0){
+                clearInterval(setIntervalCar);
+                setIntervalCar = setInterval(moveToDown, 50);
+            }else if (xCar > 950){
+                clearInterval(setIntervalCar);
+                setIntervalCar = setInterval(moveToLeft, 50);
+            }else if (yCar > 450){
+                clearInterval(setIntervalCar);
+                setIntervalCar = setInterval(moveToTop, 50);
+            }
+        }
+        function checkScore() {
+            for (count = 0; count < 3; count++){
+                if (Math.abs(xCar - xGift) < widthImage && Math.abs(yCar - yGift) < widthImage){
+                    gifts.splice(count,1);
+                    ctx.clearRect(xGift,yGift,widthImage,heightImage);
+                    score += 1;
+                }
+            }
+        }
+        function moveToRight() {
+            xCar += speed;
+            ctx.clearRect(xCar-speed,yCar,widthImage,heightImage);
+            ctx.drawImage(image3,xCar,yCar,widthImage,heightImage);
+            checkLose();
+            checkScore();
+        }
+        function moveToLeft() {
+            xCar -= speed;
+            ctx.clearRect(xCar+speed,yCar,widthImage,heightImage);
+            ctx.drawImage(image1,xCar,yCar,widthImage,heightImage);
+            checkLose();
+            checkScore();
+        }
+        function moveToDown() {
+            yCar += speed;
+            ctx.clearRect(xCar,yCar-speed,widthImage,heightImage);
+            ctx.drawImage(image2,xCar,yCar,widthImage,heightImage);
+            checkLose();
+            checkScore();
+        }
+        function moveToTop() {
+            yCar -= speed;
+            ctx.clearRect(xCar,yCar+speed,widthImage,heightImage);
+            ctx.drawImage(image,xCar,yCar,widthImage,heightImage);
+            checkLose();
+            checkScore();
+        }
+        function keydownHandler(event){
+            switch (event.which) {
+                case 37:
+                    clearInterval(setIntervalCar);
+                    setIntervalCar = setInterval(moveToLeft, 50);
+                    break;
+                case 38:
+                    clearInterval(setIntervalCar);
+                    setIntervalCar = setInterval(moveToTop, 50);
+                    break;
+                case 39:
+                    clearInterval(setIntervalCar)
+                    setIntervalCar = setInterval(moveToRight, 50);
+                    break;
+                case 40:
+                    clearInterval(setIntervalCar)
+                    setIntervalCar = setInterval(moveToDown, 50);
+                    break;
+                case 17:
+                    speed = 5;
+                    break;
+                case 18:
+                    speed = 1;
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
